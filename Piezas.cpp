@@ -22,7 +22,16 @@
 **/
 Piezas::Piezas()
 {
-
+	for(int i=0; i<BOARD_ROWS; i++)
+	{
+		std::vector<Piece> v;
+		for(int j=0; j<BOARD_COLS; j++)
+		{
+			v.push_back(Blank);
+		}
+		board.push_back(v);
+	}
+	turn=X;
 }
 
 /**
@@ -31,6 +40,13 @@ Piezas::Piezas()
 **/
 void Piezas::reset()
 {
+		for(int i=0; i<BOARD_ROWS; i++)
+	{
+		for(int j=0; j<BOARD_COLS; j++)
+		{
+			board[i][j]=Blank;
+		}
+	}
 }
 
 /**
@@ -43,7 +59,84 @@ void Piezas::reset()
 **/ 
 Piece Piezas::dropPiece(int column)
 {
-    return Blank;
+	if(column<0)
+	{
+		if(turn ==X)
+		{
+    		turn = O;
+		}
+		else
+		{
+    		turn =X;
+		}
+		return Invalid;
+	}
+	else if(column>=BOARD_COLS)
+	{
+		if(turn ==X)
+		{
+    		turn = O;
+		}
+		else
+		{
+    		turn =X;
+		}
+		return Invalid;
+	}
+	else
+	{
+		if(board[0][column] == Blank)
+		{
+			board[0][column] = turn;
+			if(turn ==X)
+			{
+    			turn = O;
+			}
+			else
+			{
+    			turn =X;
+			}
+			return board[0][column];
+		}
+		else if(board[1][column] == Blank)
+		{
+			board[1][column] = turn;
+			if(turn ==X)
+			{
+    			turn = O;
+			}
+			else
+			{
+    			turn =X;
+			}
+			return board[1][column];
+		}
+		else if(board[2][column] == Blank)
+		{
+			board[2][column] = turn;
+			if(turn ==X)
+			{
+    			turn = O;
+			}
+			else
+			{
+    			turn =X;
+			}
+			return board[2][column];
+		}
+		else
+		{
+			if(turn ==X)
+			{
+    			turn = O;
+			}
+			else
+			{
+    			turn =X;
+			}
+			return Blank;
+		}
+	}
 }
 
 /**
@@ -52,7 +145,26 @@ Piece Piezas::dropPiece(int column)
 **/
 Piece Piezas::pieceAt(int row, int column)
 {
-    return Blank;
+	if(row<0)
+	{
+		return Invalid;
+	}
+	else if(column<0)
+	{
+		return Invalid;
+	}
+	else if(row>=BOARD_ROWS)
+	{
+		return Invalid;
+	}
+	else if(column>=BOARD_COLS)
+	{
+		return Invalid;
+	}
+	else
+	{
+		return board[row][column];
+	}
 }
 
 /**
@@ -66,5 +178,85 @@ Piece Piezas::pieceAt(int row, int column)
 **/
 Piece Piezas::gameState()
 {
-    return Blank;
+	for(int i=0; i<BOARD_ROWS; i++)
+	{
+		for(int j=0; j<BOARD_COLS; j++)
+		{
+			if(board[i][j]==Blank)
+			{
+				return Invalid;
+			}
+		}
+	}
+	
+	int xnum=1;
+	int onum=1;
+	
+	for(int i=0; i<BOARD_COLS; i++)
+	{
+		int tmp=1;
+		if(board[0][i] == board[1][i])
+		{
+			tmp++;
+		}
+		if(board[1][i] == board[2][i])
+		{
+			tmp++;
+		}
+		if(board[1][i] == X)
+		{
+			if(xnum<tmp)
+			{
+				xnum=tmp;
+			}
+		}
+		else
+		{
+			if(onum<tmp)
+			{
+				onum=tmp;
+			}
+		}
+	}
+	
+	for(int i=0; i<BOARD_ROWS; i++)
+	{
+		int xtmp=1;
+		int otmp=1;
+		for(int j=0; j<BOARD_COLS-1; j++)
+		{
+			if(board[i][j] == board[i][j+1])
+			{
+				if(board[i][j] ==X)
+				{
+					xtmp++;
+				}
+				else
+				{
+					otmp++;
+				}
+			}
+		}
+		if(xnum<xtmp)
+		{
+			xnum=xtmp;
+		}
+		if(onum<otmp)
+		{
+			onum=otmp;
+		}
+	}
+	
+	if(xnum>onum)
+	{
+		return X;
+	}
+	else if(xnum<onum)
+	{
+		return O;
+	}
+	else
+	{
+		return Blank;
+	}
 }
